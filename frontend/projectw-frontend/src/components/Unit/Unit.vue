@@ -7,24 +7,25 @@ const props = defineProps<{
   hp: number;
   attack: number;
 }>();
-
-function getIconPath(id: string): string {
-  switch (id) {
-    case "moai":
-      return "src/assets/units/moai.svg";
-  }
-  return "";
-}
-const unitIcon = computed(() => getIconPath(props.unitId));
-const hpIcon = "src/assets/icons/heart.svg";
-const attackIcon = "src/assets/icons/dagger.svg";
+const unitIdTable: Record<string, string> = {
+  moai: "src/assets/units/moai.svg",
+};
+const unitIcon = computed(() => unitIdTable[props.unitId]);
 </script>
 <template>
   <div id="container">
     <img id="unitIcon" :src="unitIcon" draggable="false" />
     <div id="statsContainer">
-      <UnitStat class="stat" :icon-path="hpIcon" :stat-value="hp" />
-      <UnitStat class="stat" :icon-path="attackIcon" :stat-value="attack" />
+      <UnitStat
+        class="stat"
+        icon-path="src/assets/icons/heart.svg"
+        :stat-value="hp"
+      />
+      <UnitStat
+        class="stat"
+        icon-path="src/assets/icons/dagger.svg"
+        :stat-value="attack"
+      />
     </div>
   </div>
 </template>
