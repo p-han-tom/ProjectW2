@@ -1,5 +1,9 @@
 <script setup>
-document.querySelector("#chat-message-input").focus();
+import { onMounted, ref } from "vue";
+onMounted(() => {
+    document.querySelector("#chat-message-input").focus();
+});
+
 // const roomName = JSON.parse(
 //     document.querySelector("#room_name").textContent
 // );
@@ -17,17 +21,17 @@ document.querySelector("#chat-message-input").focus();
 //     console.error("Chat socket closed unexpectedly");
 // };
 
-const chatMsgKeyUp = (e) => {
+const roomName = ref("room1");
+
+function chatMsgKeyUp(e) {
     if (e.keyCode === 13) {
         // enter, return
         document.querySelector("#chat-message-submit").click();
     }
 }
 
-const chatMsgSubmit = (e) => {
-    const messageInputDom = document.querySelector(
-        "#chat-message-input"
-    );
+function chatMsgSubmit(e) {
+    const messageInputDom = document.querySelector("#chat-message-input");
     const message = messageInputDom.value;
     // chatSocket.send(
     //     JSON.stringify({
@@ -36,19 +40,25 @@ const chatMsgSubmit = (e) => {
     // );
     document.querySelector("#chat-log").value += message + "\n";
     messageInputDom.value = "";
-}
-
-const roomName = "room1"
-const roomNameJson = () => {
-    return JSON.stringify({ room_name: this.roomName });
+    roomName.value = "room2";
 }
 </script>
 
-
 <template>
     <textarea ref="chatlog" id="chat-log" cols="100" rows="20"></textarea><br />
-    <input id="chat-message-input" @keyup="chatMsgKeyUp($event)" type="text" size="100" />
+    <input
+        id="chat-message-input"
+        @keyup="chatMsgKeyUp($event)"
+        type="text"
+        size="100"
+    />
     <br />
-    <input id="chat-message-submit" @click="chatMsgSubmit($event)" type="button" value="Send" />
+    <input
+        id="chat-message-submit"
+        @click="chatMsgSubmit($event)"
+        type="button"
+        value="Send"
+    />
+    <div>{{ roomName }}</div>
     <!-- need to change from div. div is temp placeholder -->
 </template>
