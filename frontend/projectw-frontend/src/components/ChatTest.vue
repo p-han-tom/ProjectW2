@@ -1,14 +1,9 @@
-<<<<<<< HEAD
-<script lang="ts" setup>
-document.querySelector("#chat-message-input").focus();
-=======
 <script setup>
 import { onMounted, ref } from "vue";
 onMounted(() => {
     document.querySelector("#chat-message-input").focus();
 });
 
->>>>>>> dc5061303a2da219f9b4ef7d761054f3e180ba46
 // const roomName = JSON.parse(
 //     document.querySelector("#room_name").textContent
 // );
@@ -28,11 +23,7 @@ onMounted(() => {
 
 const roomName = ref("room1");
 
-<<<<<<< HEAD
-function chatMsgKeyUp(e: MouseEvent) {
-=======
 function chatMsgKeyUp(e) {
->>>>>>> dc5061303a2da219f9b4ef7d761054f3e180ba46
     if (e.keyCode === 13) {
         // enter, return
         document.querySelector("#chat-message-submit").click();
@@ -49,17 +40,6 @@ function chatMsgSubmit(e) {
     // );
     document.querySelector("#chat-log").value += message + "\n";
     messageInputDom.value = "";
-<<<<<<< HEAD
-}
-
-const roomName = "room1"
-</script>
-
-<template>
-    <textarea ref="chatlog" id="chat-log" cols="100" rows="20"></textarea>
-    <br />
-    <input id="chat-message-input" @keyup="chatMsgKeyUp($event)" type="text" size="100" />
-=======
     roomName.value = "room2";
 }
 </script>
@@ -72,7 +52,6 @@ const roomName = "room1"
         type="text"
         size="100"
     />
->>>>>>> dc5061303a2da219f9b4ef7d761054f3e180ba46
     <br />
     <input
         id="chat-message-submit"
