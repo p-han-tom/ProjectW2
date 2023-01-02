@@ -8,6 +8,7 @@ django = "*"
 channels = {extras = ["daphne"], version = "*"}
 djangorestframework = "*"
 redis = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 

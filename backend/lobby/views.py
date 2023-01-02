@@ -28,6 +28,4 @@ def create_lobby(request):
             # add other states
         }
         redis_client.set(new_key, json.dumps(new_game_state))
-    response = Response({'lobby_code': new_key})
-    response['Access-Control-Allow-Origin'] = os.getenv('CORS_ALLOWED_ADDRESSES')
-    return response
+    return Response({'lobby_code': new_key})
