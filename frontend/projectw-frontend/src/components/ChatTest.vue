@@ -4,24 +4,20 @@ onMounted(() => {
     document.querySelector("#chat-message-input").focus();
 });
 
-// const roomName = JSON.parse(
-//     document.querySelector("#room_name").textContent
-// );
-
-// const chatSocket = new WebSocket(
-//     new WebSocket('ws://' + window.location.host + '/ws/match/' + roomName + '/')
-// );
-
-// chatSocket.onmessage = function (e) {
-//     const data = JSON.parse(e.data);
-//     document.querySelector("#chat-log").value += data.message + "\n";
-// };
-
-// chatSocket.onclose = function (e) {
-//     console.error("Chat socket closed unexpectedly");
-// };
-
 const roomName = ref("room1");
+
+const chatSocket = new WebSocket(
+    "ws://localhost:8000/ws/match/" + roomName.value + "/"
+);
+
+chatSocket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    document.querySelector("#chat-log").value += data.message + "\n";
+};
+
+chatSocket.onclose = function (e) {
+    console.error("Chat socket closed unexpectedly");
+};
 
 function chatMsgKeyUp(e) {
     if (e.keyCode === 13) {
