@@ -3,15 +3,16 @@ import { RouterLink } from "vue-router";
 import WelcomeItem from "../components/WelcomeItem.vue";
 import Unit from "../components/Unit/Unit.vue";
 import { NConfigProvider, NMessageProvider, NSpace, darkTheme } from "naive-ui";
+import ThemeOverride from "../assets/ThemeOverride"
 import CreateLobbyButton from "@/components/Landing/CreateLobbyButton.vue";
 import JoinLobby from "@/components/Landing/JoinLobby.vue";
 </script>
 
 <template>
-    <NConfigProvider :theme="darkTheme">
+    <NConfigProvider :theme="darkTheme" :theme-overrides="ThemeOverride">
         <RouterLink to="/chattest">Chat test</RouterLink>
         <WelcomeItem msg="ProjectW" />
-        <NSpace vertical>
+        <NSpace vertical justify="center">
             <CreateLobbyButton />
             <NMessageProvider>
                 <JoinLobby />

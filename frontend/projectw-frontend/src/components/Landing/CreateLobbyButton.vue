@@ -8,6 +8,7 @@ function handleCreateLobby() {
                 case 200:
                     res.json().then((res) => {
                         const lobbyCode: string = res.lobby_code;
+
                         // Redirect to lobby
                     });
             }

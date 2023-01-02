@@ -6,11 +6,11 @@
   --dark-blue: #005983ff;
   --lilac: #c1cefeff;
   --pink: #e5c1bdff;
+  --gray: #999;
 }
 
 * {
   font-family: "Mukta", sans-serif;
-  color: lightgray;
 }
 
 body {
