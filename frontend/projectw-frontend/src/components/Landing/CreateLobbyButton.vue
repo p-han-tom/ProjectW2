@@ -2,7 +2,19 @@
 import { NButton } from "naive-ui";
 
 function handleCreateLobby() {
-    // Make HTML request to backend to create a new lobby and redirect self to it
+    fetch("http://127.0.0.1:8000/lobby/createLobby/")
+        .then((res) => {
+            switch (res.status) {
+                case 200:
+                    res.json().then((res) => {
+                        const lobbyCode: string = res.lobby_code;
+                        // Redirect to lobby
+                    });
+            }
+        })
+        .catch((e) => {
+            console.log(e);
+        });
 }
 </script>
 <template>
