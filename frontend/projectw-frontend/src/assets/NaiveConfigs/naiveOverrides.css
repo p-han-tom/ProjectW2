@@ -1,0 +1,4 @@
+/* This file contains styles that will override the styles defined by Naive UI */
+.n-button__content {
+    justify-content: center;
+}

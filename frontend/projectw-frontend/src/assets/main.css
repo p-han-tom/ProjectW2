@@ -1,4 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Mukta:wght@500&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+@import "./NaiveConfigs/naiveOverrides.css";
 
 :root {
   --sea-green: #00bd7eff;
@@ -10,7 +12,7 @@
 }
 
 * {
-  font-family: "Mukta", sans-serif;
+  font-family: "Raleway", sans-serif;
 }
 
 body {
@@ -41,6 +43,10 @@ body {
   bottom: 0.25rem;
   right: 0.25rem;
 }
+
+
+
+/* Media Queries */
 
 @media (min-width: 600px) {
   body {

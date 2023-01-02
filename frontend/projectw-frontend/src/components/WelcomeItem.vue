@@ -10,4 +10,12 @@ defineProps<{
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+h1 {
+    margin-bottom: 5vh;
+    font-size: 8rem;
+    text-align: center;
+    pointer-events: none;
+    user-select: none;
+}
+</style>

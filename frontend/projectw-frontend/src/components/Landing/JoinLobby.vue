@@ -46,7 +46,7 @@ function updateMsgReactive(content: string, type: MessageType) {
 }
 </script>
 <template>
-    <NSpace>
+    <NSpace justify="center">
         <NInput
             type="text"
             placeholder="Game code"

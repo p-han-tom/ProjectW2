@@ -10,12 +10,15 @@ import { RouterView } from "vue-router";
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+
 import { NThemeEditor } from "naive-ui";
 export default defineComponent({
     components: {
         NThemeEditor
     }
-})</script>
+})
+</script>
+
 <style scoped>
 
 </style>
