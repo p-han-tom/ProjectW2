@@ -1,8 +1,18 @@
 <template>
     <textarea ref="chatlog" id="chat-log" cols="100" rows="20"></textarea><br />
-    <input id="chat-message-input" @keyup="chatMsgKeyUp($event)" type="text" size="100" />
+    <input
+        id="chat-message-input"
+        @keyup="chatMsgKeyUp($event)"
+        type="text"
+        size="100"
+    />
     <br />
-    <input id="chat-message-submit" @click="chatMsgSubmit($event)" type="button" value="Send" />
+    <input
+        id="chat-message-submit"
+        @click="chatMsgSubmit($event)"
+        type="button"
+        value="Send"
+    />
     <div ref="room_name" id="room_name" v-html="roomNameJson"></div>
     <!-- need to change from div. div is temp placeholder -->
 </template>
