@@ -1,4 +1,4 @@
-import chat.routing
+import game.routing
 import os
 
 from channels.auth import AuthMiddlewareStack
@@ -15,6 +15,6 @@ django_asgi_app = get_asgi_application()
 application = ProtocolTypeRouter({
     "http": django_asgi_app,
     "websocket": AllowedHostsOriginValidator(
-        AuthMiddlewareStack(URLRouter(chat.routing.websocket_urlpatterns))
+        AuthMiddlewareStack(URLRouter(game.routing.websocket_urlpatterns))
     ),
 })

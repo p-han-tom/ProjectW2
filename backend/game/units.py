@@ -11,13 +11,12 @@ pool = redis.ConnectionPool(host=os.getenv('REDIS_HOST'),
 
 
 class Unit(ABC):
-
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def move(payload): pass
 
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def ability1(payload): pass
 
 

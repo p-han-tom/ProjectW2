@@ -3,7 +3,7 @@ import redis
 import os
 
 from channels.generic.websocket import AsyncWebsocketConsumer
-from entity_lookup import entity_table
+from .entity_lookup import entity_table
 
 pool = redis.ConnectionPool(host=os.getenv('REDIS_HOST'),
                             port=int(os.getenv('REDIS_PORT')),
@@ -14,12 +14,12 @@ pool = redis.ConnectionPool(host=os.getenv('REDIS_HOST'),
 
 class PlayerConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_name = self.scope["url_route"]["kwargs"]["match_id"]
+        self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
 
         # Join room group
         await self.channel_layer.group_add(self.room_name, self.channel_name)
         redis_client = redis.Redis(connection_pool=pool)
-        lobby_state = json.load(redis_client.get(self.room_name))
+        lobby_state = json.loads(redis_client.get(self.room_name))
 
         if (lobby_state != None):
             lobby_state.update({"players": lobby_state.players.append(self.channel_name)})

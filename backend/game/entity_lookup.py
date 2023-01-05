@@ -1,4 +1,4 @@
-from units import Duelist
+from .units import Duelist
 
 entity_table = {
     "duelist": Duelist()

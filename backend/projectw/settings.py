@@ -32,9 +32,12 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'daphne',
     'chat',
     'redis',
+    'lobby',
+    'game',
     'corsheaders',
     'rest_framework',
     'django.contrib.admin',
