@@ -25,7 +25,7 @@ class Duelist(Unit):
     def move(payload):
 
         redis_client = redis.Redis(connection_pool=pool)
-        game_state = json.load(redis_client.get(payload.key))
+        game_state = json.loads(redis_client.get(payload.key))
 
         # validate the movement
         curr_pos = game_state.get("units")[payload.unit_id].get("position")

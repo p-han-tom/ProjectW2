@@ -1,8 +1,12 @@
 import simplejson as json
+import time
+import threading
 import redis
 import os
+import asyncio
 
 from channels.generic.websocket import AsyncWebsocketConsumer
+from urllib.parse import parse_qs
 from .entity_lookup import entity_table
 
 pool = redis.ConnectionPool(host=os.getenv('REDIS_HOST'),
@@ -11,11 +15,15 @@ pool = redis.ConnectionPool(host=os.getenv('REDIS_HOST'),
                             password=os.getenv('REDIS_PASSWORD'),
                             username=os.getenv('REDIS_USER'))
 
+# TODO: Implement SpectatorConsumer (Low prio)
+# class SpectatorConsumer(AsyncWebsocketConsumer):
+
 
 class PlayerConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
-        # TODO: Check self.scope for the user id (would have to set socket header in frontend)
+        query_params = parse_qs(self.scope['query_string'].decode())
+        self.player_id = query_params['player_id']
         # TODO: Once there are two PlayerConsumer instances, we redirect all other connections to SpectatorConsumers
 
         # Try to join room group
@@ -26,13 +34,20 @@ class PlayerConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_add(self.room_name, self.channel_name)
             lobby_state = json.loads(lobby_text_data)
 
-            # TODO: Currently, we are only adding channel_name
-            # We should be adding a persistent player ID to the lobby_state
-            # Whenever a player connects, we should look for the player ID in players first
-            # If it exists, we update the reconnected player's socket
-            # i.e., lobby_state.players is an array of player data objects
-            # A player data object might look like: { player_id: <some_id>, channel_name: self.channel_name }
-            lobby_state.get("players").append(self.channel_name)
+            # Try to get player and update their current info
+            players = lobby_state.get("players")
+            curr_player = next((i for i, item in enumerate(players) if item['player_id'] == self.player_id), None)
+
+            if (curr_player != None):
+                players[curr_player]["last_connected"] = time.time()
+            else:
+                # Otherwise, this is a new player and we add their info to the lobby
+                players.append(
+                    {
+                        "player_id": self.player_id,
+                        "last_connected": time.time()
+                    }
+                )
             redis_client.set(self.room_name, json.dumps(lobby_state))
             await self.accept()
         else:
@@ -43,15 +58,24 @@ class PlayerConsumer(AsyncWebsocketConsumer):
         # Leave room group
         await self.channel_layer.group_discard(self.room_name, self.channel_name)
 
-        # Delete from redis
-        # TODO: We shouldn't actually delete the player from the redis instance
-        # We need to set a timer - if the disconnected player doesn't come back in x seconds,
-        # then we actually delete the player
-        # ChatGPT this idk how to do this
+        # Remove the player after <disconnect_limit> seconds of being disconnected
+        #   unless they reconnect
+        disconnect_time = time.time()
+        disconnect_limit = 5
+        await asyncio.sleep(disconnect_limit)
+
         redis_client = redis.Redis(connection_pool=pool)
         lobby_state = json.loads(redis_client.get(self.room_name))
-        lobby_state.get("players").remove(self.channel_name)
-        redis_client.set(self.room_name, json.dumps(lobby_state))
+        players = lobby_state.get("players")
+        index = next(i for i, item in enumerate(players) if item['player_id'] == self.player_id)
+        last_connected = players[index]["last_connected"]
+
+        if (disconnect_time > last_connected or last_connected - disconnect_time > disconnect_limit * 1000):
+            # remove the player
+            del players[index]
+            lobby_state.update({"players": players})
+            redis_client.set(self.room_name, json.dumps(lobby_state))
+        
 
     # Receive message from WebSocket
     async def receive(self, text_data):
@@ -63,7 +87,6 @@ class PlayerConsumer(AsyncWebsocketConsumer):
             case "start_game":
                 redis_client = redis.Redis(connection_pool=pool)
                 lobby_state = json.loads(redis_client.get(self.room_name))
-                # initialize game state at payload.key
 
                 # TODO: This is definitely not complete but works for now (see print on line 99)
                 # We should probably put this in another method as well
@@ -95,7 +118,6 @@ class PlayerConsumer(AsyncWebsocketConsumer):
                 # upsert to lobby_state
                 lobby_state.update({"board": board, "units": units})
                 redis_client.set(self.room_name, json.dumps(lobby_state))
-                print(json.loads(redis_client.get(self.room_name)))
 
             case "move":
                 # TODO: Implement move logic first
