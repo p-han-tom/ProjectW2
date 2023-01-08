@@ -24,7 +24,7 @@ def create_lobby(request):
     # initialize game state in redis
     with redis.Redis(connection_pool=pool) as redis_client:
         new_game_state = {
-            "players": []
+            "players": {}
             # add other states
         }
         redis_client.set(new_key, json.dumps(new_game_state))
