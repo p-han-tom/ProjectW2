@@ -123,17 +123,17 @@ class PlayerConsumer(AsyncJsonWebsocketConsumer):
 
                 # upsert to lobby_state
                 redis_client.set(self.room_id, json.dumps(lobby_state))
-            case "place_unit":
+            case "put_unit":
                 unit_id = content.get("payload")["unit_type"]
 
 
                 pass
-            case "remove_unit":
+            case "unput_unit":
                 unit_id = content.get("payload")["unit_id"]
             case "move":
                 # TODO: Implement move logic 
                 try:
-                    entity_table[content.get("event_type")].move(content)
+                    entity_table[content.get("unit_type")].move(content)
                     await self.channel_layer.group_send(
                         self.room_id, {"type": "move",
                                          "message": "Unit moved on board"}
