@@ -24,7 +24,15 @@ def create_lobby(request):
     # initialize game state in redis
     with redis.Redis(connection_pool=pool) as redis_client:
         new_game_state = {
-            "players": {}
+            "players": {},
+            "board": [
+                [{
+                    "tile_id": "grass",
+                    "occupant_id": None,
+                    "passable": True
+                }] * 8 for _ in range(8)
+            ],
+            "active": False
             # add other states
         }
         redis_client.set(new_key, json.dumps(new_game_state))
